@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Vulnerability & Tool Cheatsheet</title>
+    <link rel="icon" href="bug.jpg"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200">
+
+    <div class="container mx-auto px-4 py-8 md:py-12">
+        <header class="text-center mb-10">
+            <h1 class="text-4xl md:text-5xl font-bold text-white">Web Vulnerability & Tool Cheatsheet</h1>
+            <p class="text-gray-400 mt-2">A curated list of common vulnerabilities and their associated tools.</p>
+        </header>
+
+        <!-- Search Input -->
+        <div class="mb-8 max-w-2xl mx-auto">
+            <input type="text" id="searchInput" onkeyup="filterVulnerabilities()" placeholder="Search for vulnerabilities or tools..." class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white">
+        </div>
+
+        <!-- Disclaimer -->
+        <div class="bg-yellow-900/30 border border-yellow-700 text-yellow-200 px-4 py-3 rounded-lg relative mb-10 max-w-4xl mx-auto" role="alert">
+            <strong class="font-bold">Disclaimer:</strong>
+            <span class="block sm:inline ml-2">The tools and information provided are for educational and authorized security testing purposes only. Unauthorized use is illegal. Always have explicit permission before testing any system.</span>
+        </div>
+
+        <main id="vulnerability-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            
+        </main>
+    </div>
+
+    <footer class="text-center py-6 mt-8 border-t border-gray-800">
+        <p class="text-gray-500">&copy;Created for educational purposes.</p>
+    </footer>
+
+    <script>
+        const vulnerabilities = [
+            {
+                title: "Subdomain Takeover",
+                description: "Occurs when a subdomain points to a service (e.g., a cloud provider) that is no longer in use, allowing an attacker to claim it.",
+                tools: [
+                    { name: "Subzy", desc: "A fast and simple subdomain takeover scanner." },
+                    { name: "Subjack", desc: "Checks for subdomain takeover vulnerabilities." },
+                    { name: "Takeover", desc: "An automated scanner that checks for takeover fingerprints on many services." }
+                ]
+            },
+            {
+                title: "SQL Injection (SQLi)",
+                description: "A code injection technique used to attack data-driven applications, in which malicious SQL statements are inserted into an entry field for execution.",
+                tools: [
+                    { name: "sqlmap", desc: "The most popular open-source tool for automating SQLi detection and exploitation." },
+                    { name: "NoSQLMap", desc: "Designed for auditing and automating injection attacks on NoSQL databases." }
+                ]
+            },
+            {
+                title: "HTTP Request Smuggling",
+                description: "An attack technique that involves placing a second, malicious HTTP request within the body of a primary request, causing the proxy and web server to interpret the requests differently.",
+                tools: [
+                    { name: "Smuggler", desc: "A Python script to find HTTP Request Smuggling vulnerabilities." },
+                    { name: "HTTP Request Smuggler (Burp Extension)", desc: "A powerful extension for Burp Suite for advanced testing." },
+                    { name: "Ghauri", desc: "An advanced automated detection tool for this vulnerability." }
+                ]
+            },
+            {
+                title: "Cross-Site Scripting (XSS)",
+                description: "A type of security vulnerability where an attacker injects malicious scripts into content from otherwise trusted websites, which are then executed in a victim's browser.",
+                tools: [
+                    { name: "XSStrike", desc: "An intelligent XSS detection suite with fuzzing capabilities." },
+                    { name: "Dalfox", desc: "A fast and powerful parameter analysis and XSS scanning tool." },
+                    { name: "KXSS", desc: "Helps find reflected parameters in a URL, which is a starting point for XSS." }
+                ]
+            },
+            {
+                title: "Server-Side Request Forgery (SSRF)",
+                description: "A vulnerability where an attacker can induce a server-side application to make HTTP requests to an arbitrary domain of the attacker's choosing.",
+                tools: [
+                    { name: "SSRFmap", desc: "A tool to automate the process of discovering and exploiting SSRF vulnerabilities." },
+                    { name: "Gopherus", desc: "A powerful tool for generating Gopher payloads for SSRF exploitation." }
+                ]
+            },
+            {
+                title: "File Inclusion (LFI/RFI)",
+                description: "Allows an attacker to include a local (LFI) or remote (RFI) file on a web server through a script, which can lead to code execution or information disclosure.",
+                tools: [
+                    { name: "LFISuite", desc: "A tool that automates searching for and exploiting LFI vulnerabilities." },
+                    { name: "Fimap", desc: "A classic tool for finding and exploiting LFI/RFI bugs." }
+                ]
+            },
+            {
+                title: "Open Redirect",
+                description: "A vulnerability that allows an attacker to redirect users to a malicious site by manipulating the URL parameters of a trusted site.",
+                tools: [
+                    { name: "OpenRedireX", desc: "A fuzzer for finding open redirect vulnerabilities." },
+                    { name: "Redirectinator", desc: "A lightweight tool for testing and finding open redirects." }
+                ]
+            },
+            {
+                title: "Server-Side Template Injection (SSTI)",
+                description: "Occurs when an attacker is able to inject malicious input into a template, which is then executed on the server-side, often leading to remote code execution.",
+                tools: [
+                    { name: "Tplmap", desc: "A tool for detecting and exploiting SSTI vulnerabilities." }
+                ]
+            },
+            {
+                title: "Directory Bruteforcing",
+                description: "The process of trying to guess and access hidden or unlinked directories and files on a web server by trying many different names.",
+                tools: [
+                    { name: "Gobuster", desc: "A very fast tool for bruteforcing URIs, DNS subdomains, and virtual host names." },
+                    { name: "Dirsearch", desc: "An advanced command-line tool designed to brute force directories and files." }
+                ]
+            },
+            {
+                title: "Broken Access Control / IDOR",
+                description: "Insecure Direct Object References (IDOR) occur when an application provides direct access to objects based on user-supplied input, allowing attackers to bypass authorization.",
+                tools: [
+                    { name: "Arjun", desc: "A tool for finding hidden HTTP parameters, useful for uncovering potential IDORs." },
+                    { name: "Autorize (Burp Extension)", desc: "Helps automate the process of testing for authorization vulnerabilities." }
+                ]
+            },
+            {
+                title: "Deserialization",
+                description: "Insecure deserialization is a vulnerability which occurs when untrusted data is used to abuse the logic of an application, inflict a denial-of-service (DoS) attack, or even execute arbitrary code.",
+                tools: [
+                    { name: "ysoserial", desc: "A payload generator for exploiting Java deserialization vulnerabilities." },
+                    { name: "marshalsec", desc: "A framework for exploiting various Java deserialization vulnerabilities." }
+                ]
+            },
+            {
+                title: "JWT Attacks",
+                description: "Vulnerabilities related to JSON Web Tokens (JWTs), such as weak signing keys, algorithm confusion attacks, or improper validation, which can lead to session hijacking.",
+                tools: [
+                    { name: "JWT Tool", desc: "A toolkit for verifying, signing, and tampering with JWTs." },
+                    { name: "JWT Cracker", desc: "A tool to crack JWT secrets via dictionary attacks." }
+                ]
+            },
+            {
+                title: "CMS Exploitation",
+                description: "Targeting vulnerabilities specific to Content Management Systems like WordPress, Joomla, or Drupal, which often have known exploits for outdated plugins or themes.",
+                tools: [
+                    { name: "WPScan", desc: "A black box WordPress security scanner." },
+                    { name: "Droopescan", desc: "A scanner that aids security researchers in identifying issues with Drupal and Joomla sites." }
+                ]
+            },
+            {
+                title: "General Vulnerability Scanners",
+                description: "Automated tools that scan web applications for a wide range of known vulnerabilities, misconfigurations, and security flaws.",
+                tools: [
+                    { name: "Nuclei", desc: "A fast, template-based vulnerability scanner with a large community-driven template database." },
+                    { name: "Nikto", desc: "A web server scanner which performs comprehensive tests against web servers for multiple items." }
+                ]
+            },
+            {
+                title: "Cloud Security Attacks",
+                description: "Vulnerabilities and misconfigurations specific to cloud environments (AWS, GCP, Azure), such as exposed storage buckets, insecure IAM policies, or metadata service abuse.",
+                tools: [
+                    { name: "ScoutSuite", desc: "A multi-cloud security auditing tool." },
+                    { name: "Pacu", desc: "An open-source AWS exploitation framework." }
+                ]
+            }
+        ];
+
+        const vulnerabilityList = document.getElementById('vulnerability-list');
+
+        function renderVulnerabilities(filter = '') {
+            vulnerabilityList.innerHTML = '';
+            const filteredData = vulnerabilities.filter(vuln => {
+                const searchTerm = filter.toLowerCase();
+                const titleMatch = vuln.title.toLowerCase().includes(searchTerm);
+                const toolMatch = vuln.tools.some(tool => tool.name.toLowerCase().includes(searchTerm));
+                return titleMatch || toolMatch;
+            });
+
+            if (filteredData.length === 0) {
+                vulnerabilityList.innerHTML = `<p class="text-gray-400 text-center col-span-full">No vulnerabilities found matching your search.</p>`;
+                return;
+            }
+
+            filteredData.forEach(vuln => {
+                const card = document.createElement('div');
+                card.className = 'card bg-gray-800 rounded-lg shadow-lg p-6 flex flex-col';
+                
+                let toolsHtml = '<ul class="space-y-3 mt-4">';
+                vuln.tools.forEach(tool => {
+                    toolsHtml += `
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-blue-400 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M12 6V3m0 18v-3"></path></svg>
+                            <div>
+                                <h4 class="font-semibold text-white">${tool.name}</h4>
+                                <p class="text-gray-400 text-sm">${tool.desc}</p>
+                            </div>
+                        </li>
+                    `;
+                });
+                toolsHtml += '</ul>';
+
+                card.innerHTML = `
+                    <div class="flex-grow">
+                        <h3 class="text-2xl font-bold text-blue-400">${vuln.title}</h3>
+                        <p class="text-gray-300 mt-2">${vuln.description}</p>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-gray-700">
+                        <h4 class="text-lg font-semibold text-white mb-2">Tools:</h4>
+                        ${toolsHtml}
+                    </div>
+                `;
+                vulnerabilityList.appendChild(card);
+            });
+        }
+
+        function filterVulnerabilities() {
+            const filter = document.getElementById('searchInput').value;
+            renderVulnerabilities(filter);
+        }
+
+        // Initial render
+        document.addEventListener('DOMContentLoaded', () => {
+            renderVulnerabilities();
+        });
+
+    </script>
+</body>
+</html>
